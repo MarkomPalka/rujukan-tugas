@@ -6,6 +6,7 @@ import {
   detectGaps,
   extractKeywords,
 } from '../lib/keywords'
+import { suggestKeywordExpansion } from '../lib/keywordExpansion'
 import { createManualSource, searchAndCurate } from '../lib/searchService'
 import type { Project, Source, SourceCategory, SourceStatus, WorkflowStep } from '../types'
 import { CATEGORY_LABELS, WORKFLOW_STEPS } from '../types'
@@ -62,6 +63,12 @@ export default function ProjectPage() {
   const [manualYear, setManualYear] = useState('')
   const [manualUrl, setManualUrl] = useState('')
   const [manualDoi, setManualDoi] = useState('')
+
+  const [keywordChips, setKeywordChips] = useState<string[]>([])
+  const [suggestedChips, setSuggestedChips] = useState<string[]>([])
+  const [customKeyword, setCustomKeyword] = useState('')
+  const [expandingKeywords, setExpandingKeywords] = useState(false)
+  const [expandError, setExpandError] = useState<string | null>(null)
 
   const persist = useCallback(async (updated: Project, step?: WorkflowStep) => {
     updated.updatedAt = Date.now()
@@ -122,6 +129,42 @@ export default function ProjectPage() {
     await persist(project, 'sources')
   }
 
+  async function handleExpandKeywords() {
+    if (!project) return
+    setExpandingKeywords(true)
+    setExpandError(null)
+    try {
+      const { base, suggestions } = await suggestKeywordExpansion(
+        project.brief,
+        project.direction,
+        project.draft
+      )
+      setKeywordChips(base)
+      setSuggestedChips(suggestions)
+    } catch {
+      setExpandError('Gagal menyarankan kata kunci. Periksa koneksi internet dan coba lagi.')
+    } finally {
+      setExpandingKeywords(false)
+    }
+  }
+
+  function addChip(word: string) {
+    setKeywordChips((prev) => (prev.includes(word) ? prev : [...prev, word]))
+    setSuggestedChips((prev) => prev.filter((w) => w !== word))
+  }
+
+  function removeChip(word: string) {
+    setKeywordChips((prev) => prev.filter((w) => w !== word))
+  }
+
+  function addCustomKeyword(e: React.FormEvent) {
+    e.preventDefault()
+    const word = customKeyword.trim().toLowerCase()
+    if (!word) return
+    addChip(word)
+    setCustomKeyword('')
+  }
+
   async function handleSearch() {
     if (!project) return
     if (!project.brief.trim() || !project.direction.trim()) {
@@ -133,7 +176,10 @@ export default function ProjectPage() {
     setSearchError(null)
 
     try {
-      const keywords = extractKeywords(project.brief, project.direction, project.draft)
+      const keywords =
+        keywordChips.length > 0
+          ? keywordChips
+          : extractKeywords(project.brief, project.direction, project.draft)
       const queries = buildSearchQueries(keywords)
       const existingSources = project.sources.filter(
         (s) => s.category === 'existing' || s.status !== 'dismissed'
@@ -410,6 +456,85 @@ export default function ProjectPage() {
                 )}
 
                 <div>
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-1">
+                    <h3 className="font-semibold">Kata Kunci Pencarian</h3>
+                    <button
+                      type="button"
+                      onClick={() => void handleExpandKeywords()}
+                      disabled={expandingKeywords}
+                      className="text-sm text-brand-600 font-medium hover:underline disabled:opacity-50"
+                    >
+                      {expandingKeywords
+                        ? 'Menyarankan...'
+                        : keywordChips.length > 0
+                          ? '↻ Perbarui saran'
+                          : '✨ Sarankan Kata Kunci'}
+                    </button>
+                  </div>
+                  <p className="text-sm text-muted mb-3">
+                    Sinonim, istilah akademik terkait, dan padanan bahasa Inggris — hasil saran
+                    bisa kamu edit sebelum dipakai mencari rujukan. Kalau dilewati, pencarian
+                    tetap otomatis memakai kata kunci dari brief &amp; arah tulisan.
+                  </p>
+
+                  {expandError && <p className="text-sm text-red-600 mb-3">{expandError}</p>}
+
+                  {keywordChips.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      {keywordChips.map((word) => (
+                        <span
+                          key={word}
+                          className="inline-flex items-center gap-1.5 text-xs bg-brand-50 text-brand-700 pl-2.5 pr-1.5 py-1 rounded-full"
+                        >
+                          {word}
+                          <button
+                            type="button"
+                            onClick={() => removeChip(word)}
+                            aria-label={`Hapus kata kunci ${word}`}
+                            className="hover:text-brand-900"
+                          >
+                            ×
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+
+                  {suggestedChips.length > 0 && (
+                    <div className="mb-3">
+                      <p className="text-xs text-muted mb-1.5">Saran tambahan:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {suggestedChips.map((word) => (
+                          <button
+                            key={word}
+                            type="button"
+                            onClick={() => addChip(word)}
+                            className="text-xs border border-dashed border-border text-muted px-2.5 py-1 rounded-full hover:border-brand-300 hover:text-brand-700"
+                          >
+                            + {word}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <form onSubmit={addCustomKeyword} className="flex gap-2 mb-6">
+                    <input
+                      value={customKeyword}
+                      onChange={(e) => setCustomKeyword(e.target.value)}
+                      placeholder="Tambah kata kunci sendiri..."
+                      className="flex-1 border border-border rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30"
+                    />
+                    <button
+                      type="submit"
+                      className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-stone-50"
+                    >
+                      Tambah
+                    </button>
+                  </form>
+                </div>
+
+                <div>
                   <h3 className="font-semibold mb-1">Sumber yang Sudah Kamu Punya</h3>
                   <p className="text-sm text-muted mb-4">
                     Tambahkan bacaan manual agar tidak direkomendasikan ulang (opsional).
@@ -502,6 +627,7 @@ export default function ProjectPage() {
                 {workflowStep === 'sources' ? (
                   <button
                     type="button"
+                    title="Mencari ke OpenAlex & Semantic Scholar memakai kata kunci di atas, lalu diurutkan otomatis berdasarkan skor relevansi."
                     onClick={() => void handleSearch()}
                     disabled={searching || !canSearch}
                     className="bg-brand-600 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed"

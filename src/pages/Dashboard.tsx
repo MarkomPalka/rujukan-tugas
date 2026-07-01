@@ -190,6 +190,7 @@ export default function Dashboard() {
             </button>
             <button
               onClick={() => setTab('finished')}
+              title="Proyek dengan minimal 1 sumber berstatus 'Dipakai di Esai'"
               className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
                 tab === 'finished'
                   ? 'bg-white border border-border border-b-white -mb-px text-brand-700'

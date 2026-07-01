@@ -1,6 +1,7 @@
 import type { Source, SourceStatus } from '../types'
 import { CATEGORY_LABELS, STATUS_LABELS } from '../types'
 import { relevanceLabel } from '../lib/searchService'
+import Tooltip from './Tooltip'
 
 interface Props {
   source: Source
@@ -39,29 +40,36 @@ export default function SourceCard({ source, onStatusChange, onRemove }: Props) 
             {CATEGORY_LABELS[source.category]}
           </span>
           {source.relevanceScore != null && source.relevanceScore > 0 && (
-            <span
-              className="text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full"
-              title={`Skor relevansi: ${source.relevanceScore}`}
+            <Tooltip
+              label={`Skor ${source.relevanceScore}: +10 tiap kata kunci cocok, +15 tiap gap draft cocok, +5 open access, +3 terbit ≥2015.`}
             >
-              {relevanceLabel(source.relevanceScore)}
-            </span>
+              <span className="text-xs bg-brand-50 text-brand-700 px-2.5 py-1 rounded-full cursor-help">
+                {relevanceLabel(source.relevanceScore)}
+              </span>
+            </Tooltip>
           )}
           {source.citationCount != null && (
-            <span className="text-xs bg-stone-100 text-stone-700 px-2.5 py-1 rounded-full">
-              Disitasi {source.citationCount}x
-            </span>
+            <Tooltip label="Jumlah kutipan dari database OpenAlex/Semantic Scholar — makin tinggi, makin sering dirujuk peneliti lain.">
+              <span className="text-xs bg-stone-100 text-stone-700 px-2.5 py-1 rounded-full cursor-help">
+                Disitasi {source.citationCount}x
+              </span>
+            </Tooltip>
           )}
           {source.credibility && (
-            <span
-              className={`text-xs px-2.5 py-1 rounded-full ${CREDIBILITY_STYLES[source.credibility]}`}
-            >
-              {CREDIBILITY_LABELS[source.credibility]}
-            </span>
+            <Tooltip label="Dihitung dari jumlah sitasi, jenis publikasi, dan kebaruan tahun terbit. Bukan penilaian isi/metodologi — tetap cek sendiri sebelum dikutip.">
+              <span
+                className={`text-xs px-2.5 py-1 rounded-full cursor-help ${CREDIBILITY_STYLES[source.credibility]}`}
+              >
+                {CREDIBILITY_LABELS[source.credibility]}
+              </span>
+            </Tooltip>
           )}
           {source.openAccessUrl && (
-            <span className="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full">
-              Open Access
-            </span>
+            <Tooltip label="Bisa diakses/diunduh gratis, tanpa perlu langganan jurnal.">
+              <span className="text-xs bg-emerald-50 text-emerald-700 px-2.5 py-1 rounded-full cursor-help">
+                Open Access
+              </span>
+            </Tooltip>
           )}
         </div>
         <select

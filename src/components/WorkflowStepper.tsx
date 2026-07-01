@@ -25,11 +25,19 @@ export default function WorkflowStepper({
           const isDone = override === 'done' || (!override && index < currentIndex)
           const isPartial = override === 'partial'
           const canClick = canNavigateTo(step.id) && (isDone || isPartial || isActive)
+          const statusTitle = isActive
+            ? 'Tahap yang sedang dikerjakan'
+            : isDone
+              ? 'Tahap selesai'
+              : isPartial
+                ? 'Sudah pernah dicari, tapi belum ada sumber yang dipakai di esai'
+                : 'Selesaikan tahap sebelumnya dulu'
 
           return (
             <li key={step.id} className="flex items-center flex-1 min-w-0">
               <button
                 type="button"
+                title={statusTitle}
                 onClick={() => canClick && onNavigate(step.id)}
                 disabled={!canClick}
                 className={`flex items-center gap-3 w-full text-left p-3 rounded-xl transition-colors ${
