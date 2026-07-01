@@ -1,4 +1,4 @@
-# RujukanTugas
+# RefMate
 
 Kurator bacaan akademik. Buat proyek per tugas, isi brief atau draft, lalu dapatkan
 rekomendasi bacaan terkurasi dari OpenAlex dan Semantic Scholar untuk esai dan studi

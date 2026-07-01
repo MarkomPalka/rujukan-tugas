@@ -19,7 +19,7 @@ const STATUS_OPTIONS: SourceStatus[] = [
 const CREDIBILITY_STYLES: Record<'tinggi' | 'sedang' | 'rendah', string> = {
   tinggi: 'bg-emerald-50 text-emerald-700',
   sedang: 'bg-amber-50 text-amber-700',
-  rendah: 'bg-slate-100 text-slate-600',
+  rendah: 'bg-stone-100 text-stone-600',
 }
 
 const CREDIBILITY_LABELS: Record<'tinggi' | 'sedang' | 'rendah', string> = {
@@ -47,7 +47,7 @@ export default function SourceCard({ source, onStatusChange, onRemove }: Props) 
             </span>
           )}
           {source.citationCount != null && (
-            <span className="text-xs bg-slate-100 text-slate-700 px-2.5 py-1 rounded-full">
+            <span className="text-xs bg-stone-100 text-stone-700 px-2.5 py-1 rounded-full">
               Disitasi {source.citationCount}x
             </span>
           )}
@@ -96,7 +96,7 @@ export default function SourceCard({ source, onStatusChange, onRemove }: Props) 
         <p className="text-xs font-medium text-muted uppercase tracking-wide mb-1">
           Ringkasan
         </p>
-        <p className="text-sm leading-relaxed text-slate-700">{source.summary}</p>
+        <p className="text-sm leading-relaxed text-stone-700">{source.summary}</p>
       </div>
 
       {source.citationApa && (
@@ -104,7 +104,7 @@ export default function SourceCard({ source, onStatusChange, onRemove }: Props) 
           <summary className="text-xs font-medium text-muted cursor-pointer hover:text-brand-600">
             Sitasi APA 7
           </summary>
-          <p className="text-xs mt-2 p-3 bg-slate-50 rounded-lg leading-relaxed select-all">
+          <p className="text-xs mt-2 p-3 bg-stone-50 rounded-lg leading-relaxed select-all">
             {source.citationApa}
           </p>
         </details>
@@ -126,7 +126,7 @@ export default function SourceCard({ source, onStatusChange, onRemove }: Props) 
             href={`https://doi.org/${source.doi.replace(/^https?:\/\/doi\.org\//, '')}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-slate-50"
+            className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-stone-50"
           >
             DOI
           </a>

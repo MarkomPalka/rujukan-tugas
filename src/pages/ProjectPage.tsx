@@ -392,18 +392,18 @@ export default function ProjectPage() {
             {workflowStep === 'sources' && (
               <div className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                  <div className="p-3 bg-slate-50 rounded-lg">
+                  <div className="p-3 bg-stone-50 rounded-lg">
                     <p className="font-medium text-brand-900 mb-1">Brief</p>
                     <p className="text-muted line-clamp-3">{project.brief || '—'}</p>
                   </div>
-                  <div className="p-3 bg-slate-50 rounded-lg">
+                  <div className="p-3 bg-stone-50 rounded-lg">
                     <p className="font-medium text-brand-900 mb-1">Arah tulisan</p>
                     <p className="text-muted line-clamp-3">{project.direction || '—'}</p>
                   </div>
                 </div>
 
                 {project.draft.trim() && (
-                  <div className="p-3 bg-slate-50 rounded-lg text-sm">
+                  <div className="p-3 bg-stone-50 rounded-lg text-sm">
                     <p className="font-medium text-brand-900 mb-1">Draft (opsional)</p>
                     <p className="text-muted line-clamp-4">{project.draft}</p>
                   </div>
@@ -449,7 +449,7 @@ export default function ProjectPage() {
                     />
                     <button
                       type="submit"
-                      className="sm:col-span-2 text-sm bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-900 w-fit"
+                      className="sm:col-span-2 text-sm bg-stone-800 text-white px-4 py-2 rounded-lg hover:bg-stone-900 w-fit"
                     >
                       + Tambah Sumber Manual
                     </button>
@@ -481,7 +481,7 @@ export default function ProjectPage() {
                   <button
                     type="button"
                     onClick={() => void goBack()}
-                    className="text-sm px-4 py-2 rounded-lg border border-border hover:bg-slate-50"
+                    className="text-sm px-4 py-2 rounded-lg border border-border hover:bg-stone-50"
                   >
                     ← Kembali
                   </button>
@@ -493,7 +493,7 @@ export default function ProjectPage() {
                   <button
                     type="button"
                     onClick={() => void skipDraft()}
-                    className="text-sm px-4 py-2 rounded-lg text-muted hover:bg-slate-100"
+                    className="text-sm px-4 py-2 rounded-lg text-muted hover:bg-stone-100"
                   >
                     Lewati draft →
                   </button>
@@ -551,7 +551,7 @@ export default function ProjectPage() {
                     setTab('workflow')
                     void goToStep('brief')
                   }}
-                  className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-slate-50"
+                  className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-stone-50"
                 >
                   Perbarui brief & cari ulang
                 </button>

@@ -36,7 +36,7 @@ export default function WorkflowStepper({
                   isActive
                     ? 'bg-brand-50 border border-brand-200'
                     : isDone || isPartial
-                      ? 'hover:bg-slate-50 cursor-pointer'
+                      ? 'hover:bg-stone-50 cursor-pointer'
                       : 'opacity-50 cursor-not-allowed'
                 }`}
               >
@@ -48,7 +48,7 @@ export default function WorkflowStepper({
                         ? 'bg-emerald-500 text-white'
                         : isPartial
                           ? 'bg-amber-500 text-white'
-                          : 'bg-slate-200 text-slate-500'
+                          : 'bg-stone-200 text-stone-500'
                   }`}
                 >
                   {isDone ? '✓' : index + 1}
@@ -56,7 +56,7 @@ export default function WorkflowStepper({
                 <span className="min-w-0">
                   <span
                     className={`block text-sm font-medium truncate ${
-                      isActive ? 'text-brand-900' : 'text-slate-700'
+                      isActive ? 'text-brand-900' : 'text-stone-700'
                     }`}
                   >
                     {step.label}

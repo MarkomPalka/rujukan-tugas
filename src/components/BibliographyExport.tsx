@@ -46,7 +46,7 @@ export default function BibliographyExport({ sources }: Props) {
         <div className="flex gap-2">
           <button
             onClick={copyToClipboard}
-            className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-slate-50"
+            className="text-sm border border-border px-3 py-1.5 rounded-lg hover:bg-stone-50"
           >
             {copied ? 'Tersalin!' : 'Salin'}
           </button>
@@ -58,7 +58,7 @@ export default function BibliographyExport({ sources }: Props) {
           </button>
         </div>
       </div>
-      <pre className="text-xs leading-relaxed whitespace-pre-wrap bg-slate-50 rounded-lg p-4 max-h-64 overflow-y-auto">
+      <pre className="text-xs leading-relaxed whitespace-pre-wrap bg-stone-50 rounded-lg p-4 max-h-64 overflow-y-auto">
         {bibliography}
       </pre>
     </div>

@@ -44,7 +44,7 @@ export async function searchOpenAlex(query: string, perPage = 10): Promise<Sourc
   const params = new URLSearchParams({
     search: query,
     per_page: String(perPage),
-    mailto: 'user@rujukan-tugas.local',
+    mailto: 'user@refmate.local',
   })
 
   const res = await fetch(`https://api.openalex.org/works?${params}`)
